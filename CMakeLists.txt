@@ -9,6 +9,10 @@ set(GAME_EXECUTABLE ${PROJECT_NAME})
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -sUSE_SDL=2 -sUSE_SDL_IMAGE=2 -sUSE_SDL_MIXER=2 -sERROR_ON_UNDEFINED_SYMBOLS=0")
+
+# final build step
+# emcc -flto -O3 *.o asset/*.o gui/*.o input/*.o menu/*.o video/*.o libsqlite3.a libtinyxml2.a -o index.html -sUSE_SDL=2 -sUSE_SDL_IMAGE=2 -sSDL2_IMAGE_FORMATS='["png"]' -sUSE_SDL_MIXER=2 -sSDL2_MIXER_FORMATS='["ogg"]' -sASYNCIFY -sINITIAL_MEMORY=128mb --closure 1 --preload-file data/
 
 option(PORTABLE "Selects whether the build should be \"portable\", where all files are bundled together in one distributable folder/package.")
 
@@ -23,7 +27,7 @@ elseif(WIN32 AND MSVC)
 else()
 	add_executable(${GAME_EXECUTABLE})
 endif()
-target_include_directories(${GAME_EXECUTABLE} PRIVATE src)
+target_include_directories(${GAME_EXECUTABLE} PRIVATE src include)
 target_include_directories(${GAME_EXECUTABLE} SYSTEM PRIVATE third-party)
 #
 # Put the git hash into the game if possible
@@ -213,7 +217,7 @@ source_group("Third-party" FILES "${EXECUTABLE_THIRD_PARTY}")
 #
 # Dependency management
 #
-if(UNIX OR MINGW)
+if(MINGW)
 	find_package(PkgConfig)
 	if(NOT DEFINED MINIMUM_SDL2_VERSION)
 		set(MINIMUM_SDL2_VERSION 2.0.5)
@@ -264,17 +268,17 @@ else()
 	# According to https://github.com/Microsoft/vcpkg/issues/1681, package versioning in vcpkg hasn't been fully conceptualized yet.
 	# For now, we won't check the minimum version requirements here.
 	#
-	find_package(SDL2 REQUIRED)
-	find_package(SDL2_image REQUIRED)
-	find_package(SDL2_mixer REQUIRED)
-	find_package(SQLite3 REQUIRED)
+	find_package(SDL2)
+	find_package(SDL2_image)
+	find_package(SDL2_mixer)
+	find_package(SQLite3)
 	target_link_libraries(${GAME_EXECUTABLE}
 		PUBLIC
-			SDL2::SDL2
-			SDL2::SDL2main
-			SDL2_image::SDL2_image
-			SDL2_mixer::SDL2_mixer
-			SQLite::SQLite3
+			#SDL2::SDL2
+			#SDL2::SDL2main
+			#SDL2_image::SDL2_image
+			#SDL2_mixer::SDL2_mixer
+			#SQLite::SQLite3
 	)
 endif()
 #
