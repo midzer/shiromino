@@ -9,10 +9,7 @@ set(GAME_EXECUTABLE ${PROJECT_NAME})
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -sUSE_SDL=2 -sUSE_SDL_IMAGE=2 -sUSE_SDL_MIXER=2 -sERROR_ON_UNDEFINED_SYMBOLS=0")
-
-# final build step
-# emcc -flto -O3 *.o asset/*.o gui/*.o input/*.o menu/*.o video/*.o libsqlite3.a libtinyxml2.a -o index.html -sUSE_SDL=2 -sUSE_SDL_IMAGE=2 -sSDL2_IMAGE_FORMATS='["png"]' -sUSE_SDL_MIXER=2 -sSDL2_MIXER_FORMATS='["ogg"]' -sASYNCIFY -sINITIAL_MEMORY=128mb --closure 1 --preload-file data/
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto -O3 -sUSE_SDL=2 -sUSE_SDL_IMAGE=2 -sUSE_SDL_MIXER=2")
 
 option(PORTABLE "Selects whether the build should be \"portable\", where all files are bundled together in one distributable folder/package.")
 
